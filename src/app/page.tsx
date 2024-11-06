@@ -17,7 +17,7 @@ import { toast } from "sonner";
 // Configurações
 const APP_DOWNLOAD_URL =
   process.env.NEXT_PUBLIC_APP_DOWNLOAD_URL ||
-  "https://play.google.com/store/apps/details?id=com.trok.app";
+  "https://download938.mediafire.com/fskd0uy8kfjgxCrFoYTgRRvvWGXGCYt4L1IJP8u5h9jVE9RtMZ3xBxsOJuF3AYz1r42zTYACv_LmrIsUxklS_fItpKdIewp9t5IMz9PxZkgUwadeAGmDCpI5AFIa6ebkuI2VE5k7YM-ziugMiuPXLpTEDRJEcnatbgcBPRglP_LbZ0E/fpcwzteqta0gyrw/TroK%21.apk";
 
 const APP_URL = "https://app.trok-servicos.com.br";
 
@@ -120,7 +120,7 @@ const QRCodeSection = ({ onDownload }: { onDownload: () => void }) => (
     <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
       <div className="relative w-48 h-48">
         <Image
-          src="/qrcode/qrcode.png"
+          src="/qrcode.png"
           alt="QR Code para download do app TroK!"
           fill
           className="rounded-lg object-contain"
