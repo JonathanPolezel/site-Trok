@@ -239,6 +239,8 @@ export default function LandingPage() {
                     priority
                     className="object-contain"
                     sizes="(max-width: 640px) 200px, (max-width: 768px) 300px, 400px"
+                    loader={({ src }) => src} // adicione esta linha
+                    unoptimized // e esta
                   />
                 </div>
               </motion.div>
