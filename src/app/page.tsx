@@ -232,7 +232,7 @@ export default function LandingPage() {
               >
                 <div className="relative w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px]">
                   <Image
-                    src="/images/Trokinho.png" // Caminho atualizado
+                    src="/trokinho.png" // Caminho atualizado
                     alt="Mascote TroK!"
                     fill
                     priority
