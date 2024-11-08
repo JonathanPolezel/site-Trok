@@ -11,25 +11,37 @@ import {
   FiCheck,
   FiSmartphone,
 } from "react-icons/fi";
-import { Header } from "@/components/layout/Header";
 import { toast } from "sonner";
+import { Header } from "@/components/layout/Header";
 
-// Configurações
+// Types
+type Stats = {
+  value: string;
+  label: string;
+};
+
+type Feature = {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  color: string;
+  benefits: string[];
+};
+
+// Constants
 const APP_DOWNLOAD_URL =
   process.env.NEXT_PUBLIC_APP_DOWNLOAD_URL ||
   "https://download938.mediafire.com/fskd0uy8kfjgxCrFoYTgRRvvWGXGCYt4L1IJP8u5h9jVE9RtMZ3xBxsOJuF3AYz1r42zTYACv_LmrIsUxklS_fItpKdIewp9t5IMz9PxZkgUwadeAGmDCpI5AFIa6ebkuI2VE5k7YM-ziugMiuPXLpTEDRJEcnatbgcBPRglP_LbZ0E/fpcwzteqta0gyrw/TroK%21.apk";
 
 const APP_URL = "https://app.trok-servicos.com.br";
 
-// Stats
-const stats = [
+const stats: Stats[] = [
   { value: "50.000+", label: "Downloads" },
   { value: "4.8", label: "Avaliação" },
   { value: "1.200+", label: "Avaliações" },
-] as const;
+];
 
-// Features
-const features = [
+const features: Feature[] = [
   {
     icon: FiSmartphone,
     title: "App Completo",
@@ -74,34 +86,34 @@ const features = [
       "Comunidade ativa",
     ],
   },
-] as const;
+];
 
-// Componente Feature Card
+// Components
 const FeatureCard = ({
   feature,
   index,
 }: {
-  feature: (typeof features)[number];
+  feature: Feature;
   index: number;
 }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: index * 0.1 }}
-    className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+    className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
   >
     <div
       className={`w-12 h-12 bg-${feature.color}-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-4`}
     >
       <feature.icon className={`w-6 h-6 text-${feature.color}-500`} />
     </div>
-    <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-    <p className="text-gray-600 dark:text-gray-300 mb-4">
+    <h3 className="text-lg font-semibold mb-3">{feature.title}</h3>
+    <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
       {feature.description}
     </p>
     <ul className="space-y-2">
       {feature.benefits.map((item) => (
-        <li key={item} className="flex items-center text-gray-500">
+        <li key={item} className="flex items-center text-sm text-gray-500">
           <FiCheck className={`w-5 h-5 text-${feature.color}-500 mr-2`} />
           {item}
         </li>
@@ -110,22 +122,21 @@ const FeatureCard = ({
   </motion.div>
 );
 
-// Componente QR Code
 const QRCodeSection = ({ onDownload }: { onDownload: () => void }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
-    className="mt-12 flex flex-col items-center space-y-6"
+    className="flex flex-col items-center space-y-4"
   >
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-      <div className="relative w-48 h-48">
+    <div className="bg-[#1a2335]/80 backdrop-blur-sm p-4 rounded-xl shadow-lg w-[200px] sm:w-[240px]">
+      <div className="relative w-full aspect-square">
         <Image
           src="/qrcode.png"
           alt="QR Code para download do app TroK!"
           fill
           className="rounded-lg object-contain"
           priority
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="(max-width: 640px) 200px, 240px"
         />
       </div>
     </div>
@@ -134,33 +145,16 @@ const QRCodeSection = ({ onDownload }: { onDownload: () => void }) => (
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={onDownload}
-      className="flex items-center gap-2 px-6 py-2.5 text-orange-500 hover:text-orange-600 transition-colors font-medium"
+      className="flex items-center gap-2 px-6 py-3 text-orange-500 hover:text-orange-600 transition-colors font-medium text-lg"
     >
       <FiDownload className="w-5 h-5" />
       <span>Baixar Aplicativo</span>
     </motion.button>
 
-    <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs text-center">
+    <p className="text-sm text-gray-400 text-center max-w-xs">
       Escaneie o QR Code ou clique no botão acima para baixar o aplicativo
     </p>
   </motion.div>
-);
-
-// Componente Stats
-const StatsSection = () => (
-  <div className="grid grid-cols-3 gap-8 py-8 max-w-3xl mx-auto">
-    {stats.map((stat, index) => (
-      <motion.div
-        key={stat.label}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.1 }}
-      >
-        <p className="text-3xl font-bold text-orange-500">{stat.value}</p>
-        <p className="text-sm text-gray-500">{stat.label}</p>
-      </motion.div>
-    ))}
-  </div>
 );
 
 export default function LandingPage() {
@@ -197,7 +191,7 @@ export default function LandingPage() {
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-[#111827] text-gray-900 dark:text-white overflow-x-hidden">
       <Header
         isMobileMenuOpen={isMobileMenuOpen}
         setIsMobileMenuOpen={setIsMobileMenuOpen}
@@ -205,37 +199,85 @@ export default function LandingPage() {
         onRegister={handleRegister}
       />
 
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <main className="flex flex-col min-h-[calc(100vh-80px)] pt-20">
         {/* Hero Section */}
-        <section className="py-16 md:py-24 text-center max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-8"
-          >
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold">
-              Seu Negócio na{" "}
-              <span className="text-orange-500">Palma da Mão</span>
-            </h1>
+        <section className="flex-1 flex flex-col justify-start w-full">
+          <div className="container mx-auto px-4 md:px-6 lg:px-8 pt-8 md:pt-16 lg:pt-24">
+            <div className="flex flex-col items-center">
+              {/* Título e Subtítulo */}
+              <div className="text-center mb-8 sm:mb-12">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="space-y-4"
+                >
+                  <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold px-4">
+                    Seu Negócio na{" "}
+                    <span className="bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent whitespace-nowrap">
+                      Palma da Mão
+                    </span>
+                  </h1>
+                  <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-xl mx-auto px-4">
+                    Gerencie serviços, clientes e pagamentos de forma simples e
+                    profissional com o TroK.
+                  </p>
+                </motion.div>
+              </div>
 
-            <p className="text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Gerencie serviços, clientes e pagamentos de forma simples e
-              profissional com o TroK.
-            </p>
+              {/* Mascote */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                className="w-full flex justify-center items-center my-8 sm:my-12"
+              >
+                <div className="relative w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px]">
+                  <Image
+                    src="/Trokinho.png"
+                    alt="Mascote TroK!"
+                    fill
+                    priority
+                    className="object-contain"
+                    sizes="(max-width: 640px) 200px, (max-width: 768px) 300px, 400px"
+                  />
+                </div>
+              </motion.div>
 
-            {/* Stats Section */}
-            <StatsSection />
+              {/* Stats */}
+              <div className="w-full max-w-3xl">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="bg-[#1a2335]/80 backdrop-blur-sm rounded-2xl p-6 sm:p-8"
+                >
+                  <div className="grid grid-cols-3 gap-4 sm:gap-8">
+                    {stats.map((stat) => (
+                      <div key={stat.label} className="text-center">
+                        <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-500">
+                          {stat.value}
+                        </p>
+                        <p className="text-sm sm:text-base text-gray-400 mt-1">
+                          {stat.label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
 
-            {/* QR Code Section */}
-            <QRCodeSection onDownload={handleDownload} />
-          </motion.div>
+              {/* QR Code */}
+              <div className="mt-12 sm:mt-16">
+                <QRCodeSection onDownload={handleDownload} />
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* Features Section */}
-        <section className="py-16 bg-gray-50 dark:bg-gray-800 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <section className="w-full bg-gray-50 dark:bg-gray-800 mt-16 sm:mt-24 py-16">
+          <div className="container mx-auto px-4 md:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {features.map((feature, index) => (
                 <FeatureCard
                   key={feature.title}

@@ -5,10 +5,10 @@ import { fontSans, fontMono } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Trok!",
+  title: "Trok! ",
   description: "Serviços na palma da sua mão",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.jpg",
   },
 };
 
