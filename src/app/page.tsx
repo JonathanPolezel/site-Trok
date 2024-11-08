@@ -200,7 +200,6 @@ export default function LandingPage() {
       />
 
       <main className="flex flex-col min-h-[calc(100vh-80px)] pt-20">
-        {/* Hero Section */}
         <section className="flex-1 flex flex-col justify-start w-full">
           <div className="container mx-auto px-4 md:px-6 lg:px-8 pt-8 md:pt-16 lg:pt-24">
             <div className="flex flex-col items-center">
@@ -224,7 +223,7 @@ export default function LandingPage() {
                 </motion.div>
               </div>
 
-              {/* Mascote */}
+              {/* Mascote - Componente atualizado */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -233,14 +232,12 @@ export default function LandingPage() {
               >
                 <div className="relative w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px]">
                   <Image
-                    src="/Trokinho.png"
+                    src="/images/Trokinho.png" // Caminho atualizado
                     alt="Mascote TroK!"
                     fill
                     priority
                     className="object-contain"
                     sizes="(max-width: 640px) 200px, (max-width: 768px) 300px, 400px"
-                    loader={({ src }) => src} // adicione esta linha
-                    unoptimized // e esta
                   />
                 </div>
               </motion.div>
