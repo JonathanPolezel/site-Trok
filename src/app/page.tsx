@@ -8,13 +8,13 @@ import {
   FiShield,
   FiZap,
   FiStar,
-  FiCheck,
   FiSmartphone,
+  FiCheck,
 } from "react-icons/fi";
 import { toast } from "sonner";
 import { Header } from "@/components/layout/Header";
 
-// Types
+// Tipos
 type Stats = {
   value: string;
   label: string;
@@ -28,20 +28,24 @@ type Feature = {
   benefits: string[];
 };
 
-// Constants
+// Constantes
 const APP_DOWNLOAD_URL =
   process.env.NEXT_PUBLIC_APP_DOWNLOAD_URL ||
   "https://download938.mediafire.com/fskd0uy8kfjgxCrFoYTgRRvvWGXGCYt4L1IJP8u5h9jVE9RtMZ3xBxsOJuF3AYz1r42zTYACv_LmrIsUxklS_fItpKdIewp9t5IMz9PxZkgUwadeAGmDCpI5AFIa6ebkuI2VE5k7YM-ziugMiuPXLpTEDRJEcnatbgcBPRglP_LbZ0E/fpcwzteqta0gyrw/TroK%21.apk";
 
 const APP_URL = "https://app.trok-servicos.com.br";
 
-const stats: Stats[] = [
+// Imagem de fallback
+const IMAGEM_FALLBACK = "/placeholder-mascot.png";
+
+// Dados estáticos
+const estatisticas: Stats[] = [
   { value: "50.000+", label: "Downloads" },
   { value: "4.8", label: "Avaliação" },
   { value: "1.200+", label: "Avaliações" },
 ];
 
-const features: Feature[] = [
+const recursos: Feature[] = [
   {
     icon: FiSmartphone,
     title: "App Completo",
@@ -88,115 +92,189 @@ const features: Feature[] = [
   },
 ];
 
-// Components
-const FeatureCard = ({
+// Componentes
+const CartaoRecurso = ({
   feature,
   index,
 }: {
   feature: Feature;
   index: number;
-}) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: index * 0.1 }}
-    className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-  >
-    <div
-      className={`w-12 h-12 bg-${feature.color}-100 dark:bg-gray-800 rounded-lg flex items-center justify-center mb-4`}
-    >
-      <feature.icon className={`w-6 h-6 text-${feature.color}-500`} />
-    </div>
-    <h3 className="text-lg font-semibold mb-3">{feature.title}</h3>
-    <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
-      {feature.description}
-    </p>
-    <ul className="space-y-2">
-      {feature.benefits.map((item) => (
-        <li key={item} className="flex items-center text-sm text-gray-500">
-          <FiCheck className={`w-5 h-5 text-${feature.color}-500 mr-2`} />
-          {item}
-        </li>
-      ))}
-    </ul>
-  </motion.div>
-);
+}) => {
+  // Classes de cores seguras
+  const classesCoresFundo = {
+    orange: "bg-orange-100 dark:bg-gray-800",
+    green: "bg-green-100 dark:bg-gray-800",
+    blue: "bg-blue-100 dark:bg-gray-800",
+    yellow: "bg-yellow-100 dark:bg-gray-800",
+  };
 
-const QRCodeSection = ({ onDownload }: { onDownload: () => void }) => (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    className="flex flex-col items-center space-y-4"
-  >
-    <div className="bg-[#1a2335]/80 backdrop-blur-sm p-4 rounded-xl shadow-lg w-[200px] sm:w-[240px]">
-      <div className="relative w-full aspect-square">
-        <Image
-          src="/qrcode.png"
-          alt="QR Code para download do app TroK!"
-          fill
-          className="rounded-lg object-contain"
-          priority
-          sizes="(max-width: 640px) 200px, 240px"
+  const classesTextosCores = {
+    orange: "text-orange-500",
+    green: "text-green-500",
+    blue: "text-blue-500",
+    yellow: "text-yellow-500",
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+    >
+      <div
+        className={`w-12 h-12 ${
+          classesCoresFundo[feature.color as keyof typeof classesCoresFundo]
+        } rounded-lg flex items-center justify-center mb-4`}
+      >
+        <feature.icon
+          className={`w-6 h-6 ${
+            classesTextosCores[feature.color as keyof typeof classesTextosCores]
+          }`}
         />
       </div>
+      <h3 className="text-lg font-semibold mb-3">{feature.title}</h3>
+      <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
+        {feature.description}
+      </p>
+      <ul className="space-y-2">
+        {feature.benefits.map((item) => (
+          <li key={item} className="flex items-center text-sm text-gray-500">
+            <FiCheck
+              className={`w-5 h-5 ${
+                classesTextosCores[
+                  feature.color as keyof typeof classesTextosCores
+                ]
+              } mr-2`}
+            />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </motion.div>
+  );
+};
+
+const ImagemMascote = () => {
+  const [imgSrc, setImgSrc] = useState("/trokinho.png");
+  const [erro, setErro] = useState(false);
+
+  return (
+    <div className="relative w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px]">
+      <Image
+        src={imgSrc}
+        alt="Mascote TroK!"
+        fill
+        priority
+        className="object-contain"
+        sizes="(max-width: 640px) 200px, (max-width: 768px) 300px, 400px"
+        onError={() => {
+          if (!erro) {
+            setImgSrc(IMAGEM_FALLBACK);
+            setErro(true);
+          }
+        }}
+      />
     </div>
+  );
+};
+const SecaoQRCode = ({ onDownload }: { onDownload: () => void }) => {
+  const [erroQR, setErroQR] = useState(false);
 
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={onDownload}
-      className="flex items-center gap-2 px-6 py-3 text-orange-500 hover:text-orange-600 transition-colors font-medium text-lg"
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="flex flex-col items-center space-y-4"
     >
-      <FiDownload className="w-5 h-5" />
-      <span>Baixar Aplicativo</span>
-    </motion.button>
+      <div className="bg-[#1a2335]/80 backdrop-blur-sm p-4 rounded-xl shadow-lg w-[200px] sm:w-[240px]">
+        <div className="relative w-full aspect-square">
+          <Image
+            src="/qrcode.png"
+            alt="QR Code para download do app TroK!"
+            fill
+            className="rounded-lg object-contain"
+            priority
+            sizes="(max-width: 640px) 200px, 240px"
+            onError={() => setErroQR(true)}
+          />
+        </div>
+      </div>
 
-    <p className="text-sm text-gray-400 text-center max-w-xs">
-      Escaneie o QR Code ou clique no botão acima para baixar o aplicativo
-    </p>
-  </motion.div>
-);
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={onDownload}
+        className="flex items-center gap-2 px-6 py-3 text-orange-500 hover:text-orange-600 transition-colors font-medium text-lg"
+      >
+        <FiDownload className="w-5 h-5" />
+        <span>Baixar Aplicativo</span>
+      </motion.button>
 
-export default function LandingPage() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+      <p className="text-sm text-gray-400 text-center max-w-xs">
+        {erroQR
+          ? "Clique no botão acima para baixar o aplicativo"
+          : "Escaneie o QR Code ou clique no botão acima para baixar o aplicativo"}
+      </p>
+    </motion.div>
+  );
+};
+
+export default function PaginaInicial() {
+  const [menuMobileAberto, setMenuMobileAberto] = useState(false);
+  const [montado, setMontado] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    setMontado(true);
   }, []);
 
   const handleDownload = useCallback(async () => {
     try {
-      window.location.href = APP_DOWNLOAD_URL;
-      toast.success("Redirecionando para download...", {
-        description: "Você será redirecionado para a Play Store",
-      });
-    } catch (error) {
+      const novaJanela = window.open(APP_DOWNLOAD_URL, "_blank");
+      if (novaJanela) {
+        toast.success("Redirecionando para download...", {
+          description: "Você será redirecionado para a Play Store",
+        });
+      } else {
+        throw new Error("Popup bloqueado");
+      }
+    } catch (erro) {
       toast.error("Erro ao iniciar o download", {
         description:
           "Por favor, tente novamente ou acesse diretamente a Play Store",
       });
-      console.error(error);
+      console.error("Erro no download:", erro);
+    }
+  }, []);
+
+  const handleNavegacao = useCallback((url: string) => {
+    try {
+      window.location.href = url;
+    } catch (erro) {
+      console.error("Erro na navegação:", erro);
+      toast.error("Erro ao navegar", {
+        description: "Por favor, tente novamente mais tarde",
+      });
     }
   }, []);
 
   const handleLogin = useCallback(() => {
-    window.location.href = `${APP_URL}/login`;
-  }, []);
+    handleNavegacao(`${APP_URL}/login`);
+  }, [handleNavegacao]);
 
-  const handleRegister = useCallback(() => {
-    window.location.href = `${APP_URL}/cadastro`;
-  }, []);
+  const handleCadastro = useCallback(() => {
+    handleNavegacao(`${APP_URL}/cadastro`);
+  }, [handleNavegacao]);
 
-  if (!mounted) return null;
+  if (!montado) return null;
 
   return (
     <div className="min-h-screen bg-[#111827] text-gray-900 dark:text-white overflow-x-hidden">
       <Header
-        isMobileMenuOpen={isMobileMenuOpen}
-        setIsMobileMenuOpen={setIsMobileMenuOpen}
+        isMobileMenuOpen={menuMobileAberto}
+        setIsMobileMenuOpen={setMenuMobileAberto}
         onLogin={handleLogin}
-        onRegister={handleRegister}
+        onRegister={handleCadastro}
       />
 
       <main className="flex flex-col min-h-[calc(100vh-80px)] pt-20">
@@ -223,26 +301,17 @@ export default function LandingPage() {
                 </motion.div>
               </div>
 
-              {/* Mascote - Componente atualizado */}
+              {/* Mascote */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="w-full flex justify-center items-center my-8 sm:my-12"
               >
-                <div className="relative w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px]">
-                  <Image
-                    src="/trokinho.png" // Caminho atualizado
-                    alt="Mascote TroK!"
-                    fill
-                    priority
-                    className="object-contain"
-                    sizes="(max-width: 640px) 200px, (max-width: 768px) 300px, 400px"
-                  />
-                </div>
+                <ImagemMascote />
               </motion.div>
 
-              {/* Stats */}
+              {/* Estatísticas */}
               <div className="w-full max-w-3xl">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -251,7 +320,7 @@ export default function LandingPage() {
                   className="bg-[#1a2335]/80 backdrop-blur-sm rounded-2xl p-6 sm:p-8"
                 >
                   <div className="grid grid-cols-3 gap-4 sm:gap-8">
-                    {stats.map((stat) => (
+                    {estatisticas.map((stat) => (
                       <div key={stat.label} className="text-center">
                         <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-500">
                           {stat.value}
@@ -267,20 +336,20 @@ export default function LandingPage() {
 
               {/* QR Code */}
               <div className="mt-12 sm:mt-16">
-                <QRCodeSection onDownload={handleDownload} />
+                <SecaoQRCode onDownload={handleDownload} />
               </div>
             </div>
           </div>
         </section>
 
-        {/* Features Section */}
+        {/* Seção de Recursos */}
         <section className="w-full bg-gray-50 dark:bg-gray-800 mt-16 sm:mt-24 py-16">
           <div className="container mx-auto px-4 md:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-              {features.map((feature, index) => (
-                <FeatureCard
-                  key={feature.title}
-                  feature={feature}
+              {recursos.map((recurso, index) => (
+                <CartaoRecurso
+                  key={recurso.title}
+                  feature={recurso}
                   index={index}
                 />
               ))}
