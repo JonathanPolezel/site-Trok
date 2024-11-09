@@ -1,6 +1,7 @@
+// src/app/page.tsx
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
@@ -10,173 +11,80 @@ import {
   FiStar,
   FiSmartphone,
   FiCheck,
+  FiLogIn,
+  FiUserPlus,
+  FiMenu,
+  FiX,
 } from "react-icons/fi";
 import { toast } from "sonner";
-import { Header } from "@/components/layout/Header";
-
-// Tipos
-type Stats = {
-  value: string;
-  label: string;
-};
-
-type Feature = {
-  icon: React.ElementType;
-  title: string;
-  description: string;
-  color: string;
-  benefits: string[];
-};
 
 // Constantes
-const APP_DOWNLOAD_URL = "/app_trok.apk";
+const URL_DOWNLOAD_APP = "/app_trok.apk";
+const URL_APP = "https://app.trok-servicos.com.br";
+const IMAGEM_PADRAO = "/trokinho.png";
 
-const APP_URL = "https://app.trok-servicos.com.br";
-
-// Imagem de fallback
-const IMAGEM_FALLBACK = "/placeholder-mascot.png";
-
-// Dados estáticos
-const estatisticas: Stats[] = [
-  { value: "50.000+", label: "Downloads" },
-  { value: "4.8", label: "Avaliação" },
-  { value: "1.200+", label: "Avaliações" },
+// Tipos
+type Estatistica = { valor: string; rotulo: string };
+type Recurso = {
+  icone: React.ElementType;
+  titulo: string;
+  descricao: string;
+  cor: string;
+  beneficios: string[];
+};
+const estatisticas: Estatistica[] = [
+  { valor: "50.000+", rotulo: "Downloads" },
+  { valor: "4.8", rotulo: "Avaliação" },
+  { valor: "1.200+", rotulo: "Avaliações" },
 ];
 
-const recursos: Feature[] = [
+const recursos: Recurso[] = [
   {
-    icon: FiSmartphone,
-    title: "App Completo",
-    description: "Gerencie seus serviços, agenda e clientes em um só lugar.",
-    color: "orange",
-    benefits: [
+    icone: FiSmartphone,
+    titulo: "App Completo",
+    descricao: "Gerencie seus serviços, agenda e clientes em um só lugar.",
+    cor: "laranja",
+    beneficios: [
       "Agendamento integrado",
       "Gestão de clientes",
       "Controle financeiro",
     ],
   },
   {
-    icon: FiShield,
-    title: "100% Seguro",
-    description: "Pagamentos seguros e proteção total dos seus dados.",
-    color: "green",
-    benefits: [
+    icone: FiShield,
+    titulo: "100% Seguro",
+    descricao: "Pagamentos seguros e proteção total dos seus dados.",
+    cor: "verde",
+    beneficios: [
       "Criptografia de dados",
       "Backups automáticos",
       "Conformidade LGPD",
     ],
   },
   {
-    icon: FiZap,
-    title: "Super Rápido",
-    description: "Interface otimizada para a melhor experiência possível.",
-    color: "blue",
-    benefits: [
+    icone: FiZap,
+    titulo: "Super Rápido",
+    descricao: "Interface otimizada para a melhor experiência possível.",
+    cor: "azul",
+    beneficios: [
       "Carregamento instantâneo",
       "Modo offline",
       "Sincronização automática",
     ],
   },
   {
-    icon: FiStar,
-    title: "Bem Avaliado",
-    description: "4.8 de 5 estrelas na Play Store, mais de 50 mil downloads.",
-    color: "yellow",
-    benefits: [
+    icone: FiStar,
+    titulo: "Bem Avaliado",
+    descricao: "4.8 de 5 estrelas na Play Store, mais de 50 mil downloads.",
+    cor: "amarelo",
+    beneficios: [
       "Suporte premium",
       "Atualizações frequentes",
       "Comunidade ativa",
     ],
   },
-];
-
-// Componentes
-const CartaoRecurso = ({
-  feature,
-  index,
-}: {
-  feature: Feature;
-  index: number;
-}) => {
-  // Classes de cores seguras
-  const classesCoresFundo = {
-    orange: "bg-orange-100 dark:bg-gray-800",
-    green: "bg-green-100 dark:bg-gray-800",
-    blue: "bg-blue-100 dark:bg-gray-800",
-    yellow: "bg-yellow-100 dark:bg-gray-800",
-  };
-
-  const classesTextosCores = {
-    orange: "text-orange-500",
-    green: "text-green-500",
-    blue: "text-blue-500",
-    yellow: "text-yellow-500",
-  };
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
-      className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-    >
-      <div
-        className={`w-12 h-12 ${
-          classesCoresFundo[feature.color as keyof typeof classesCoresFundo]
-        } rounded-lg flex items-center justify-center mb-4`}
-      >
-        <feature.icon
-          className={`w-6 h-6 ${
-            classesTextosCores[feature.color as keyof typeof classesTextosCores]
-          }`}
-        />
-      </div>
-      <h3 className="text-lg font-semibold mb-3">{feature.title}</h3>
-      <p className="text-gray-600 dark:text-gray-300 mb-4 text-sm">
-        {feature.description}
-      </p>
-      <ul className="space-y-2">
-        {feature.benefits.map((item) => (
-          <li key={item} className="flex items-center text-sm text-gray-500">
-            <FiCheck
-              className={`w-5 h-5 ${
-                classesTextosCores[
-                  feature.color as keyof typeof classesTextosCores
-                ]
-              } mr-2`}
-            />
-            {item}
-          </li>
-        ))}
-      </ul>
-    </motion.div>
-  );
-};
-
-const ImagemMascote = () => {
-  const [imgSrc, setImgSrc] = useState("/trokinho.png");
-  const [erro, setErro] = useState(false);
-
-  return (
-    <div className="relative w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px]">
-      <Image
-        src={imgSrc}
-        alt="Mascote TroK!"
-        fill
-        priority
-        className="object-contain"
-        sizes="(max-width: 640px) 200px, (max-width: 768px) 300px, 400px"
-        onError={() => {
-          if (!erro) {
-            setImgSrc(IMAGEM_FALLBACK);
-            setErro(true);
-          }
-        }}
-      />
-    </div>
-  );
-};
-const SecaoQRCode = ({ onDownload }: { onDownload: () => void }) => {
+]; // Componente do QR Code
+function SecaoQRCode() {
   const [erroQR, setErroQR] = useState(false);
 
   return (
@@ -185,7 +93,7 @@ const SecaoQRCode = ({ onDownload }: { onDownload: () => void }) => {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center space-y-4"
     >
-      <div className="bg-[#1a2335]/80 backdrop-blur-sm p-4 rounded-xl shadow-lg w-[200px] sm:w-[240px]">
+      <div className="bg-gray-800/80 backdrop-blur-sm p-4 rounded-xl shadow-lg w-[200px] sm:w-[240px]">
         <div className="relative w-full aspect-square">
           <Image
             src="/qrcode.png"
@@ -199,36 +107,160 @@ const SecaoQRCode = ({ onDownload }: { onDownload: () => void }) => {
         </div>
       </div>
 
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={onDownload}
-        className="flex items-center gap-2 px-6 py-3 text-orange-500 hover:text-orange-600 transition-colors font-medium text-lg"
-      >
-        <FiDownload className="w-5 h-5" />
-        <span>Baixar Aplicativo</span>
-      </motion.button>
-
       <p className="text-sm text-gray-400 text-center max-w-xs">
         {erroQR
-          ? "Clique no botão acima para baixar o aplicativo"
-          : "Escaneie o QR Code ou clique no botão acima para baixar o aplicativo"}
+          ? "Use o botão abaixo para baixar o aplicativo"
+          : "Escaneie o QR Code para baixar o aplicativo"}
       </p>
     </motion.div>
   );
-};
+}
 
-export default function PaginaInicial() {
-  const [menuMobileAberto, setMenuMobileAberto] = useState(false);
-  const [montado, setMontado] = useState(false);
+// Componente do Cabeçalho
+function Cabecalho() {
+  const [menuAberto, setMenuAberto] = useState(false);
 
-  useEffect(() => {
-    setMontado(true);
+  const navegarPara = useCallback((url: string) => {
+    try {
+      window.location.href = url;
+    } catch (erro) {
+      toast.error("Erro ao navegar", {
+        description: "Por favor, tente novamente mais tarde",
+      });
+    }
   }, []);
 
-  const handleDownload = useCallback(async () => {
+  const fazerLogin = () => navegarPara(`${URL_APP}/login`);
+  const fazerCadastro = () => navegarPara(`${URL_APP}/cadastro`);
+
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 bg-gray-800 backdrop-blur-sm border-b border-gray-700">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="flex items-center justify-between">
+          <span className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
+            TroK!
+          </span>
+
+          <div className="hidden md:flex items-center gap-4">
+            <button
+              onClick={fazerLogin}
+              className="inline-flex items-center gap-2 px-8 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-full font-medium shadow-lg shadow-orange-500/25 transition-all duration-200"
+            >
+              <FiLogIn className="w-5 h-5" />
+              Entrar
+            </button>
+            <button
+              onClick={fazerCadastro}
+              className="inline-flex items-center gap-2 px-8 py-3 border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white rounded-full font-medium transition-all duration-200"
+            >
+              <FiUserPlus className="w-5 h-5" />
+              Criar Conta
+            </button>
+          </div>
+
+          <button
+            onClick={() => setMenuAberto(!menuAberto)}
+            className="md:hidden p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
+          >
+            {menuAberto ? (
+              <FiX className="w-6 h-6" />
+            ) : (
+              <FiMenu className="w-6 h-6" />
+            )}
+          </button>
+        </div>
+
+        {menuAberto && (
+          <div className="md:hidden mt-6 pb-6 space-y-4 animate-in slide-in-from-top">
+            <button
+              onClick={fazerLogin}
+              className="flex w-full items-center justify-center gap-2 px-8 py-3.5 bg-orange-500 hover:bg-orange-600 text-white rounded-full font-medium shadow-lg shadow-orange-500/25 transition-all duration-200"
+            >
+              <FiLogIn className="w-5 h-5" />
+              Entrar
+            </button>
+            <button
+              onClick={fazerCadastro}
+              className="flex w-full items-center justify-center gap-2 px-8 py-3.5 border-2 border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white rounded-full font-medium transition-all duration-200"
+            >
+              <FiUserPlus className="w-5 h-5" />
+              Criar Conta
+            </button>
+          </div>
+        )}
+      </nav>
+    </header>
+  );
+}
+
+// Componente do Cartão de Recurso
+function CartaoRecurso({
+  feature: recurso,
+  index,
+}: {
+  feature: Recurso;
+  index: number;
+}) {
+  const coresFundo = {
+    laranja: "bg-gray-800",
+    verde: "bg-gray-800",
+    azul: "bg-gray-800",
+    amarelo: "bg-gray-800",
+  };
+
+  const coresIcone = {
+    laranja: "text-orange-500",
+    verde: "text-green-500",
+    azul: "text-blue-500",
+    amarelo: "text-yellow-500",
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.1 }}
+      className="bg-gray-800 p-6 rounded-xl hover:bg-gray-700 transition-all duration-300"
+    >
+      <div
+        className={`w-12 h-12 ${
+          coresFundo[recurso.cor as keyof typeof coresFundo]
+        } rounded-lg flex items-center justify-center mb-4`}
+      >
+        <recurso.icone
+          className={`w-6 h-6 ${
+            coresIcone[recurso.cor as keyof typeof coresIcone]
+          }`}
+        />
+      </div>
+      <h3 className="text-lg font-semibold mb-3 text-white">
+        {recurso.titulo}
+      </h3>
+      <p className="text-gray-400 mb-4 text-sm">{recurso.descricao}</p>
+      <ul className="space-y-2">
+        {recurso.beneficios.map((beneficio) => (
+          <li
+            key={beneficio}
+            className="flex items-center text-sm text-gray-400"
+          >
+            <FiCheck
+              className={`w-5 h-5 ${
+                coresIcone[recurso.cor as keyof typeof coresIcone]
+              } mr-2 opacity-50`}
+            />
+            {beneficio}
+          </li>
+        ))}
+      </ul>
+    </motion.div>
+  );
+} // Componente Principal da Página
+export default function PaginaInicial() {
+  const [imagemSrc, setImagemSrc] = useState("/trokinhoo.gif");
+
+  const iniciarDownload = useCallback(async () => {
     try {
-      const novaJanela = window.open(APP_DOWNLOAD_URL, "_blank");
+      const novaJanela = window.open(URL_DOWNLOAD_APP, "_blank");
       if (novaJanela) {
         toast.success("Redirecionando para download...", {
           description: "Você será redirecionado para a Play Store",
@@ -241,39 +273,13 @@ export default function PaginaInicial() {
         description:
           "Por favor, tente novamente ou acesse diretamente a Play Store",
       });
-      console.error("Erro no download:", erro);
     }
   }, []);
-
-  const handleNavegacao = useCallback((url: string) => {
-    try {
-      window.location.href = url;
-    } catch (erro) {
-      console.error("Erro na navegação:", erro);
-      toast.error("Erro ao navegar", {
-        description: "Por favor, tente novamente mais tarde",
-      });
-    }
-  }, []);
-
-  const handleLogin = useCallback(() => {
-    handleNavegacao(`${APP_URL}/login`);
-  }, [handleNavegacao]);
-
-  const handleCadastro = useCallback(() => {
-    handleNavegacao(`${APP_URL}/cadastro`);
-  }, [handleNavegacao]);
-
-  if (!montado) return null;
 
   return (
-    <div className="min-h-screen bg-[#111827] text-gray-900 dark:text-white overflow-x-hidden">
-      <Header
-        isMobileMenuOpen={menuMobileAberto}
-        setIsMobileMenuOpen={setMenuMobileAberto}
-        onLogin={handleLogin}
-        onRegister={handleCadastro}
-      />
+    // Cor principal de fundo aqui ↓
+    <div className="min-h-screen bg-gray-900 text-white overflow-x-hidden">
+      <Cabecalho />
 
       <main className="flex flex-col min-h-[calc(100vh-80px)] pt-20">
         <section className="flex-1 flex flex-col justify-start w-full">
@@ -298,15 +304,24 @@ export default function PaginaInicial() {
                   </p>
                 </motion.div>
               </div>
-
-              {/* Mascote */}
+              {/* Imagem do Mascote */}
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
                 className="w-full flex justify-center items-center my-8 sm:my-12"
               >
-                <ImagemMascote />
+                <div className="relative w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] md:w-[400px] md:h-[400px]">
+                  <Image
+                    src={imagemSrc}
+                    alt="Mascote TroK!"
+                    fill
+                    priority
+                    className="object-contain"
+                    sizes="(max-width: 640px) 200px, (max-width: 768px) 300px, 400px"
+                    onError={() => setImagemSrc(IMAGEM_PADRAO)}
+                  />
+                </div>
               </motion.div>
 
               {/* Estatísticas */}
@@ -315,16 +330,16 @@ export default function PaginaInicial() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="bg-[#1a2335]/80 backdrop-blur-sm rounded-2xl p-6 sm:p-8"
+                  className="bg-gray-800 backdrop-blur-sm rounded-2xl p-6 sm:p-8"
                 >
                   <div className="grid grid-cols-3 gap-4 sm:gap-8">
-                    {estatisticas.map((stat) => (
-                      <div key={stat.label} className="text-center">
+                    {estatisticas.map((estatistica) => (
+                      <div key={estatistica.rotulo} className="text-center">
                         <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-500">
-                          {stat.value}
+                          {estatistica.valor}
                         </p>
                         <p className="text-sm sm:text-base text-gray-400 mt-1">
-                          {stat.label}
+                          {estatistica.rotulo}
                         </p>
                       </div>
                     ))}
@@ -332,21 +347,31 @@ export default function PaginaInicial() {
                 </motion.div>
               </div>
 
-              {/* QR Code */}
-              <div className="mt-12 sm:mt-16">
-                <SecaoQRCode onDownload={handleDownload} />
+              {/* QR Code e Botão Download */}
+              <div className="mt-12 sm:mt-16 flex flex-col items-center gap-8">
+                <SecaoQRCode />
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={iniciarDownload}
+                  className="flex items-center gap-2 px-6 py-3 text-orange-500 hover:text-orange-600 transition-colors font-medium text-lg"
+                >
+                  <FiDownload className="w-5 h-5" />
+                  <span>Baixar Aplicativo</span>
+                </motion.button>
               </div>
             </div>
           </div>
         </section>
-
         {/* Seção de Recursos */}
-        <section className="w-full bg-gray-50 dark:bg-gray-800 mt-16 sm:mt-24 py-16">
+        {/* Segunda cor de fundo principal aqui ↓ */}
+        <section className="w-full bg-gray-900 mt-16 sm:mt-24 py-16">
           <div className="container mx-auto px-4 md:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {recursos.map((recurso, index) => (
                 <CartaoRecurso
-                  key={recurso.title}
+                  key={recurso.titulo}
                   feature={recurso}
                   index={index}
                 />
