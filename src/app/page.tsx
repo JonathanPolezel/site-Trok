@@ -123,7 +123,7 @@ function Cabecalho() {
   const navegarPara = useCallback((url: string) => {
     try {
       window.location.href = url;
-    } catch (erro) {
+    } catch {
       toast.error("Erro ao navegar", {
         description: "Por favor, tente novamente mais tarde",
       });
@@ -268,7 +268,7 @@ export default function PaginaInicial() {
       } else {
         throw new Error("Popup bloqueado");
       }
-    } catch (erro) {
+    } catch {
       toast.error("Erro ao iniciar o download", {
         description:
           "Por favor, tente novamente ou acesse diretamente a Play Store",
