@@ -93,7 +93,7 @@ function SecaoQRCode() {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center space-y-4"
     >
-      <div className="bg-gray-800/80 backdrop-blur-sm p-4 rounded-xl shadow-lg w-[200px] sm:w-[240px]">
+      <div className="bg-neutral-700/80 backdrop-blur-sm p-4 rounded-xl shadow-lg w-[200px] sm:w-[240px]">
         <div className="relative w-full aspect-square">
           <Image
             src="/qrcode.png"
@@ -107,7 +107,7 @@ function SecaoQRCode() {
         </div>
       </div>
 
-      <p className="text-sm text-gray-400 text-center max-w-xs">
+      <p className="text-sm text-gray-300 text-center max-w-xs">
         {erroQR
           ? "Use o botão abaixo para baixar o aplicativo"
           : "Escaneie o QR Code para baixar o aplicativo"}
@@ -134,7 +134,7 @@ function Cabecalho() {
   const fazerCadastro = () => navegarPara(`${URL_APP}/cadastro`);
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-gray-800 backdrop-blur-sm border-b border-gray-700">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-neutral-800-800 backdrop-blur-sm border-b border-neutral-600">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold bg-gradient-to-r from-orange-500 to-orange-600 bg-clip-text text-transparent">
@@ -160,7 +160,7 @@ function Cabecalho() {
 
           <button
             onClick={() => setMenuAberto(!menuAberto)}
-            className="md:hidden p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
+            className="md:hidden p-2 text-white hover:bg-neutral-700 rounded-lg transition-colors"
           >
             {menuAberto ? (
               <FiX className="w-6 h-6" />
@@ -202,7 +202,7 @@ function CartaoRecurso({
   index: number;
 }) {
   const coresFundo = {
-    laranja: "bg-gray-800",
+    laranja: "bg-neutral-800",
     verde: "bg-gray-800",
     azul: "bg-gray-800",
     amarelo: "bg-gray-800",
@@ -220,7 +220,7 @@ function CartaoRecurso({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="bg-gray-800 p-6 rounded-xl hover:bg-gray-700 transition-all duration-300"
+      className="bg-neutral-700 p-6 rounded-xl hover:bg-neutral-700 transition-all duration-300"
     >
       <div
         className={`w-12 h-12 ${
@@ -236,12 +236,12 @@ function CartaoRecurso({
       <h3 className="text-lg font-semibold mb-3 text-white">
         {recurso.titulo}
       </h3>
-      <p className="text-gray-400 mb-4 text-sm">{recurso.descricao}</p>
+      <p className="text-gray-300 mb-4 text-sm">{recurso.descricao}</p>
       <ul className="space-y-2">
         {recurso.beneficios.map((beneficio) => (
           <li
             key={beneficio}
-            className="flex items-center text-sm text-gray-400"
+            className="flex items-center text-sm text-gray-300"
           >
             <FiCheck
               className={`w-5 h-5 ${
@@ -256,7 +256,7 @@ function CartaoRecurso({
   );
 } // Componente Principal da Página
 export default function PaginaInicial() {
-  const [imagemSrc, setImagemSrc] = useState("/trokinhoo.gif");
+  const [imagemSrc, setImagemSrc] = useState("/trokinho.png");
 
   const iniciarDownload = useCallback(async () => {
     try {
@@ -278,7 +278,7 @@ export default function PaginaInicial() {
 
   return (
     // Cor principal de fundo aqui ↓
-    <div className="min-h-screen bg-gray-900 text-white overflow-x-hidden">
+    <div className="min-h-screen bg-neutral-800 text-white overflow-x-hidden">
       <Cabecalho />
 
       <main className="flex flex-col min-h-[calc(100vh-80px)] pt-20">
@@ -298,7 +298,7 @@ export default function PaginaInicial() {
                       Palma da Mão
                     </span>
                   </h1>
-                  <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-xl mx-auto px-4">
+                  <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-xl mx-auto px-4">
                     Gerencie serviços, clientes e pagamentos de forma simples e
                     profissional com o TroK.
                   </p>
@@ -330,7 +330,7 @@ export default function PaginaInicial() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="bg-gray-800 backdrop-blur-sm rounded-2xl p-6 sm:p-8"
+                  className="bg-neutral-700 backdrop-blur-sm rounded-2xl p-6 sm:p-8"
                 >
                   <div className="grid grid-cols-3 gap-4 sm:gap-8">
                     {estatisticas.map((estatistica) => (
@@ -338,7 +338,7 @@ export default function PaginaInicial() {
                         <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-500">
                           {estatistica.valor}
                         </p>
-                        <p className="text-sm sm:text-base text-gray-400 mt-1">
+                        <p className="text-sm sm:text-base text-gray-300 mt-1">
                           {estatistica.rotulo}
                         </p>
                       </div>
@@ -366,7 +366,7 @@ export default function PaginaInicial() {
         </section>
         {/* Seção de Recursos */}
         {/* Segunda cor de fundo principal aqui ↓ */}
-        <section className="w-full bg-gray-900 mt-16 sm:mt-24 py-16">
+        <section className="w-full bg-neutral-800 mt-16 sm:mt-24 py-16">
           <div className="container mx-auto px-4 md:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {recursos.map((recurso, index) => (
