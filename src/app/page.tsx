@@ -93,7 +93,7 @@ function SecaoQRCode() {
       animate={{ opacity: 1, y: 0 }}
       className="flex flex-col items-center space-y-4"
     >
-      <div className="bg-neutral-700/80 backdrop-blur-sm p-4 rounded-xl shadow-lg w-[200px] sm:w-[240px]">
+      <div className="bg-neutral-800 backdrop-blur-sm p-4 rounded-xl shadow-lg w-[200px] sm:w-[240px]">
         <div className="relative w-full aspect-square">
           <Image
             src="/qrcode.png"
@@ -160,7 +160,7 @@ function Cabecalho() {
 
           <button
             onClick={() => setMenuAberto(!menuAberto)}
-            className="md:hidden p-2 text-white hover:bg-neutral-700 rounded-lg transition-colors"
+            className="md:hidden p-2 text-white hover:bg-neutral-800 rounded-lg transition-colors"
           >
             {menuAberto ? (
               <FiX className="w-6 h-6" />
@@ -220,7 +220,7 @@ function CartaoRecurso({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="bg-neutral-700 p-6 rounded-xl hover:bg-neutral-700 transition-all duration-300"
+      className="bg-neutral-800 p-6 rounded-xl hover:bg-neutral-800 transition-all duration-300"
     >
       <div
         className={`w-12 h-12 ${
@@ -278,7 +278,7 @@ export default function PaginaInicial() {
 
   return (
     // Cor principal de fundo aqui ↓
-    <div className="min-h-screen bg-neutral-800 text-white overflow-x-hidden">
+    <div className="min-h-screen bg-neutral-900 text-white overflow-x-hidden">
       <Cabecalho />
 
       <main className="flex flex-col min-h-[calc(100vh-80px)] pt-20">
@@ -330,7 +330,7 @@ export default function PaginaInicial() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
-                  className="bg-neutral-700 backdrop-blur-sm rounded-2xl p-6 sm:p-8"
+                  className="bg-neutral-800 backdrop-blur-sm rounded-2xl p-6 sm:p-8"
                 >
                   <div className="grid grid-cols-3 gap-4 sm:gap-8">
                     {estatisticas.map((estatistica) => (
@@ -366,7 +366,7 @@ export default function PaginaInicial() {
         </section>
         {/* Seção de Recursos */}
         {/* Segunda cor de fundo principal aqui ↓ */}
-        <section className="w-full bg-neutral-800 mt-16 sm:mt-24 py-16">
+        <section className="w-full bg-neutral-900 mt-16 sm:mt-24 py-16">
           <div className="container mx-auto px-4 md:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
               {recursos.map((recurso, index) => (
