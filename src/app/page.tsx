@@ -19,7 +19,7 @@ import {
 import { toast } from "sonner";
 
 // Constantes
-const URL_DOWNLOAD_APP = "/app_trok.apk";
+const URL_DOWNLOAD_APP = "/app-trok.apk";
 const URL_APP = "https://app.trok-servicos.com.br";
 const IMAGEM_PADRAO = "/trokinho.png";
 
