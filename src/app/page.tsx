@@ -302,6 +302,16 @@ export default function PaginaInicial() {
                     Gerencie serviços, clientes e pagamentos de forma simples e
                     profissional com o TroK.
                   </p>
+
+                  {/* Badge Gratuito */}
+                  <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-green-500 rounded-full text-white font-semibold animate-pulse">
+                    <span className="text-sm sm:text-base">100% Gratuito</span>
+                  </div>
+
+                  {/* Chamada para Ação */}
+                  <p className="mt-4 text-base sm:text-lg text-orange-500 font-medium max-w-xl mx-auto px-4">
+                    Entre ou crie sua conta agora mesmo e comece a usar! 🚀
+                  </p>
                 </motion.div>
               </div>
               {/* Imagem do Mascote */}
